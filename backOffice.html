@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--COLLEGAMENTI BOOTSTRAP-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>M4W4_Prova_di_valutazione</title> 
+</head>
+<body>
+  <!-- Modal -->
+      <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+              <h5 class="modal-title" id="modalLabel">OPERAZIONE ESEGUITA CON SUCCESSO!</h5>
+            </div>
+            <div class="modal-footer d-flex justify-content-center " style="min-height: 4em;">
+              <button type="button" class="btn btn-success position-absolute" style="min-width: 80%;" data-bs-dismiss="modal">Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  <!--fine modale-->
+     <main class="container-fluid p-0 row">
+        <div class="col-2 min-vh-100 " id="sidebar_sx">
+            <!--header sidebar-->
+            <div class="mb-2 d-flex justify-content-center"><!--1-->
+                <img src="Assets/epicode_logo.png" alt="logo" style="max-height:3rem;">
+                <h2>BACKOFFICE</h2>
+            </div>
+            <!---->
+            <p class="border-bottom border-1"></p><!--2linea divisoria-->
+            <!---->
+            <!--body sidebar-->
+            <div class="d-flex justify-content-evenly"><!--3-->
+                <img src="https://picsum.photos/30" alt="user pic" class="rounded-4 ">
+                <span>Nome Utente</span>
+            </div>
+            <!---->
+           <div class="mt-2 text-center fw-bold">privilege admin</div> <!--4-->
+            <!---->
+            <section class="text-center mb-3 mt-5 section_canvas" style="cursor: pointer;"> <!--5-->
+                <h4 class="choose dashboard"><i class="bi bi-clipboard2-fill me-2"></i>DASHBOARD</h4> 
+            </section>
+             <!---->
+            <section class="d-flex flex-column "><!--6-->
+              <h4><i class="bi bi-basket me-3"></i>PRODOTTI</h4> 
+              <div class="choose create">
+                <i class="bi bi-bag-plus me-1 "></i> AGGIUNGI PRODOTTO
+              </div>
+              <div class="choose delete">
+                <i class="bi bi-bag-x me-1"></i> 
+                ELIMINA PRODOTTO/
+              </div>
+              <div class="choose_jolly update">
+                <i class="bi bi-gear-fill me-1"></i>
+                MODIFICA PRODOTTO
+              </div>
+                    
+            </section>
+            <!---->
+        </div>
+<!-----------------------------------SEZIONE-AGGIUNGI-PRODOTTO------------------------------------------------------------------------------------------>
+        <section class="col-10 d-flex justify-content-center align align-items-center section create d-none" id="main_form">
+
+              <h2 class="position-absolute top-0 mt-4 to_disappear" style="max-width: 20em;">Compila i campi sottostanti per
+                 <span style="color: rgba(51, 2, 140, 0.9); font-weight: bold; text-decoration: underline;">aggiungere</span> un prodotto nel sistema
+              </h2>
+              <h2 class="position-absolute top-0 mt-4 to_insert d-none" style="max-width: 20em;">Compila i campi sottostanti per 
+                <span style="color: rgba(51, 2, 140, 0.9); font-weight: bold; text-decoration: underline;">modificare</span> il prodotto nel sistema
+              </h2>
+              <form id="productForm">
+
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" id="input_name">Nome prodotto</span>
+                    <input type="text" class="form-control" aria-label="input_name" aria-describedby="input product name" required>
+                </div>
+                 <!---->
+                <div class="form-floating mt-2 ">
+                    <textarea class="form-control" placeholder="Descrizione del prodotto" id="input_description_form" required></textarea>
+                    <label for="input_description_form">Descrizione del prodotto</label>
+                </div>
+                 <!---->
+                <div class="input-group input-group-lg mt-2 ">
+                    <span class="input-group-text" id="input_brand">Marca prodotto</span>
+                    <input type="text" class="form-control" aria-label="input_brand" aria-describedby="input product brand" required>
+                </div>
+                 <!---->
+                <div class="input-group input-group-lg mt-2 ">
+                    <span class="input-group-text" id="input_url_img">Url immagine prodotto</span>
+                    <input type="text" class="form-control" aria-label="input_url_img" aria-describedby="input product url immage" required>
+               </div>
+               <div class="mt-2 mb-4">
+                    <label for="numberInput" class="form-label display-6 ">Prezzo:</label>
+                    <input type="number" class="form-control" id="numberInput" name="numberInput"
+                          placeholder="Inserisci un prezzo" min="0" max="100000" step="1" required>
+                </div>
+       
+                  <button class="btn btn-success to_disappear " type="button" id="button_form_add" >Invia Prodotto</button>
+                  <button class="btn btn-warning to_insert d-none" type="button" id="button_form_update">Modifica Prodotto</button>
+              </form>
+        </section>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------->
+        <section class="col-10 position-relative section delete d-none " id="main_delete">
+         
+          <h2 class="position-absolute top-0 mt-4 d-block" style="max-width: 20em;">Seleziona i prodotti da 
+            <span style="color: rgba(51, 2, 140, 0.9); font-weight: bold; text-decoration: underline;">eliminare</span>
+          </h2>
+        
+
+          <input type="text" placeholder="Articolo ricercato" class="position-absolute" id="research" style="top: 25%;">
+
+          <table class="table position-absolute" style="top:40%; max-width:98%">
+            <thead>
+              <tr>
+                <th scope="col">
+                    <select name="Seleziona" id="filtro">
+                        <option value="name">Nome</option>
+                        <option value="brand">Marca</option>
+                        <option value="price">Prezzo</option>
+                    </select>
+                </th>
+                <th scope="col">Nome</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Prezzo</th>
+                <th scope="col">Elimina</th>
+                <th scope="col">Modifica</th>
+
+              </tr>
+            </thead>
+            <tbody id="workstation">
+            
+         
+            </tbody>
+          </table>
+
+        </section>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------->
+<section class="col-10 position-relative section choose dashboard" id="main_dashboard">
+  
+
+  <input type="text" placeholder="Articolo ricercato" class="position-absolute" id="research_two" style="top: 3%; width: 30%">
+
+  <table class="table position-absolute" style="top:10%; max-width:98%">
+    <thead>
+      <tr>
+        <th scope="col">
+            <select name="Seleziona" id="filtro_two">
+                <option value="name">Nome</option>
+                <option value="brand">Marca</option>
+                <option value="price">Prezzo</option>
+            </select>
+        </th>
+        <th scope="col">Nome</th>
+        <th scope="col">Marca</th>
+        <th scope="col">Prezzo</th>
+        <th scope="col">Descrizione</th>
+        <th scope="col">Immagine Articolo</th>
+
+      </tr>
+    </thead>
+    <tbody id="workstation_dashboard">
+    
+ 
+    </tbody>
+  </table>
+
+</section>
+<!----------------------------------------------------------------------------------------------------------------------------------------------------->
+  </main>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="script_backOffice.js"></script>
+</body>
+</html>

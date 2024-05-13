@@ -1,0 +1,224 @@
+/*----------------------------------
+//////////NAVBAR///////////////////
+---------------------------------*/
+#nav_mother {
+    min-height: 10rem;
+    max-height: 3rem;
+    z-index: 222;
+    transition: all 2s ease-in-out; /* Transizione graduale */
+}
+#nav_mother nav img{
+    max-height: 5rem;
+    margin-right: 27%;
+}
+#nav_mother nav div:first-child h1{
+    position: absolute;
+    color: #33028C;
+    top: 19%;
+    left: 50%;
+}
+#barra_ricerca{
+    border: 3px solid #33028C;
+    border-radius: 15px;
+}
+/*ICONE DELLA NAVBAR*/
+.position-absolute.lente{
+    background-color: #33028C;
+    border-radius: 0 15px 15px 0;
+    right: 0;
+    height: 45%;
+    width: 8%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+}
+
+.position-absolute.lente i:hover{
+    font-size: 1.5rem;
+}
+
+.icon_rx{
+    font-size: 2.8rem;
+    color: #33028C;
+    cursor: pointer;
+}
+.icon_rx i:hover{
+    font-size: 3.2rem;
+}
+
+.contatore_articoli.position-absolute{/*contatore carrello*/
+    top: 60%;
+    right: 73%;
+    height: 35%;
+    width: 15%;
+    background-color: orchid;
+    color: black;
+    border-radius: 48%;
+    font-size: 1.5rem;
+}
+
+.bi.bi-arrow-through-heart-fill .contatore_articoli.position-absolute{/*contatore preferiti*/
+    top: 60%;
+    right: 20%;
+    height: 35%;
+    width: 51%;
+}
+
+.footer{
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;  
+}
+.footer > footer{
+    padding: 0.3rem 0 !important;
+}
+
+
+/*----------------------------------
+//////////MAIN///////////////////
+---------------------------------*/
+main.container-fluid {
+    padding: 0 10rem;
+}
+/*------------CARTA---------------*/
+.card.card_custum{
+    border: 0;
+    cursor: pointer;
+}
+.card.card_custum > img{
+   border-radius: 1.5rem !important;
+}
+.card.card_custum > div{
+    padding: 0.3rem;
+ }
+ .card.card_custum > div > h5{
+    max-height: 1.2em;
+    max-width: 15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+ }
+
+ .card.card_custum > div > p{
+   color: #33028C;
+   font-weight: 700;
+ }
+
+
+
+ .card.card_custum > div > h5.hoverClass{
+    max-height: fit-content;
+    white-space: normal;
+}
+
+a.btn.btn-primary.add_carrello{
+    display: none;
+    background-color: rgba(51, 2, 140, 0.9);
+    position: absolute;
+    bottom: 40%;
+    left: 15%
+}
+a.btn.btn-primary.preferiti{
+    display: none;
+    background-color: rgba(51, 2, 140, 0.9);
+    position: absolute;
+    top: 1%;
+    right: 9%;
+    border-radius: 60%;
+}
+
+/*-------BOTTONI IN HOVER CON CLASSE----*/
+a.btn.btn-primary.add_carrello.hoverClass{
+    display: inline-block;
+}
+a.btn.btn-primary.preferiti.hoverClass{
+    display: inline-block;
+}
+a.btn.btn-primary.add_carrello.hoverClass:hover{
+    font-size: 1.01em;
+    border: 3px solid #CB2478;
+  
+}
+a.btn.btn-primary.preferiti.hoverClass:hover{
+    font-size: 1.01em;
+    border: 3px solid #CB2478;
+    color: #CB2478;
+}
+
+/*--------------------------------------------*/
+/*-----------BARRA SCORRIMENTO CUSTOM--------*/
+::-webkit-scrollbar {/*backgraund della barra*/
+    background-color: rgba(51, 2, 140,0.4);
+  }
+  ::-webkit-scrollbar-thumb {/*colore indicatore barra*/
+    background: rgba(51, 2, 140,0.6);
+    border-radius: 15px; 
+}
+::-webkit-scrollbar-thumb:hover {/*colore indicatore barra se puntato*/
+    background: rgba(51, 2, 140);
+}
+
+
+
+/*------------AGGIUNTE SUCCESSIVE (DROPDOWN)*/                  
+.dropdown-menu{
+    border: 0!important;
+    border-top: 2px solid rgba(51, 2, 140) !important ;
+    border-radius: 0 !important ;
+    transform: translate3d(-110px, 79.2px, 0px) !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    color: white !important;
+}
+#dropdown_carrello.dropdown-menu{
+    transform: translate3d(22px, 79.2px, 0px) !important;
+}
+.dropdown-menu li{
+    padding: 1px 0 !important;
+    border-bottom: 1px solid white !important;
+}
+
+.dropdown-menu li > img{
+  max-height: 2em !important;
+  margin: 0 !important;
+  margin-left: 1em !important;
+}
+
+  .dropdown-menu li > span {
+   
+    margin: 0 0.5rem !important;
+    white-space: nowrap;
+}
+.drop_i:hover{
+    font-size: 110% !important;
+    color:#CB2478;
+}
+
+/*///////////////////////////////////////////*/
+/*////////////STILI-BACKOFFICE//////////////*/
+/*///////////////////////////////////////////*/
+#sidebar_sx{
+    background-color: rgba(51, 2, 140, 0.5);
+}
+section{
+    padding-left: 1em;
+}
+section div:hover, .action_delete:hover, .action_modify:hover{
+    color: #33028C;
+    font-size: 1.01em;
+    text-shadow: 1px 1px 0 #CB2478;
+    cursor: pointer;
+}
+section div.clicked, h4.clicked{
+    color: #33028C;
+    scale: 1.1;
+    text-shadow: 1px 1px 0 #CB2478;
+}
+#main_form, #main_delete{
+    background-color: rgba(203, 36, 120, 0.8);
+}
