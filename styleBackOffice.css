@@ -1,0 +1,28 @@
+/*///////////////////////////////////////////*/
+/*////////////STILI-BACKOFFICE//////////////*/
+/*///////////////////////////////////////////*/
+#sidebar_sx{
+    background-color: rgba(51, 2, 140, 0.5);
+    min-height: 100vh;
+    border: solid 3px rgb(51, 2, 140);
+    border-radius: 5px;
+    padding: 1em;
+}
+section{
+    padding-left: 1em;
+}
+section div:hover, .action_delete:hover, .action_modify:hover{
+    color: #33028C;
+    font-size: 1.01em;
+    text-shadow: 1px 1px 0 #CB2478;
+    cursor: pointer;
+}
+section div.clicked, h4.clicked{
+    color: #33028C;
+    scale: 1.1;
+    text-shadow: 1px 1px 0 #CB2478;
+}
+body{
+    background-color: rgb(203, 36, 120,0.3);
+}
+

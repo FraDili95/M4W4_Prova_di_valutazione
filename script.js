@@ -1,11 +1,11 @@
 // PUNTATORI GENERALI E URL
 //----------------------------------
-//-->1)Riferimenti andpoint prodotti
-const URL_PRODUCTS_ANDPOINT = "https://striveschool-api.herokuapp.com/api/product/";
-const KEY_PRODUCTS_ANDPOINT = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNlNGI1OTcyYjNlYTAwMTU3MWZkNDQiLCJpYXQiOjE3MTUzNTg1NTMsImV4cCI6MTcxNjU2ODE1M30.vdzkWNpeUpxw5g9HITvnlbowagVxXxU6c1sAW-4IiAk"
+//Riferimenti andpoint prodotti
+const URL_PRODUCTS_ENDPOINT = "https://striveschool-api.herokuapp.com/api/product/";
+const KEY_PRODUCTS_ENDPOINT = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNlNGI1OTcyYjNlYTAwMTU3MWZkNDQiLCJpYXQiOjE3MTUzNTg1NTMsImV4cCI6MTcxNjU2ODE1M30.vdzkWNpeUpxw5g9HITvnlbowagVxXxU6c1sAW-4IiAk"
 const workStation = document.querySelector("body main div.row.row-cols-lg-8");
 const jsonProducts = [];//contenitore copia jason della chiamata generale dei prodotti
-var libriPreferiti = [];//futuro array di oggetti
+var productsFavourite = [];//futuro array di oggetti
 var totalTrolley = [];//futuro array di prezzi
 //FINE DATI GENERALI...............
 //funzione richiesta fetchGET..................................................
@@ -18,8 +18,7 @@ async function requestFetchGet(URL_FETCH, KEY_FETCH) {//la funzione fetchGET pre
             });
         if (!response.ok) {//se la risposta del server ha problemi
             throw new Error("Errore di rete: " + response.statusText);//butto giù l'errore
-        }
-        
+        }      
         const data = await response.json();//converto la risp in JSON
         console.log("Dati ricevuti: ", data);//me la vedo in log
         return data;//la ritorno 
@@ -30,29 +29,33 @@ async function requestFetchGet(URL_FETCH, KEY_FETCH) {//la funzione fetchGET pre
 }
 ///////////////////////////////////////////////////////////////////////////
 //funzione rendeiring Dom...................................................
-function renderingDom( dataArray, punct ){
-    dataArray.forEach( prodotto => {
-        punct.innerHTML += 
-        `
+function renderingDom(dataArray, punct) {
+    dataArray.forEach(prodotto => {
+        punct.innerHTML +=
+            `
             <div class="card card_custum position-relative" style="width: 15rem; height: 28rem">
-                <a href="/dettagli.html?id=${prodotto.asin}">
-                <img style="height: 18rem;" src="${prodotto.img}" class="card-img-top" alt="${prodotto.title}">
+                <a href="/dettagli.html?id=${prodotto._id}">
+                <img style="height: 18rem;" src="${prodotto.imageUrl}" class="card-img-top" alt="${prodotto.name}">
                 </a>
                 <a href="#" class="btn btn-primary add_carrello">Aggiungi al carrello</a>
                 <a href="#" class="btn btn-primary preferiti"><i class="bi bi-heart-fill"></i></a>
                 <div class="card-body">
-                    <h5 class="card-title">${prodotto.title}</h5>
+                    <h5 class="card-title">${prodotto.name}</h5>
                     <p class="card-text">Prezzo:${prodotto.price}€</p>
                 </div>
             </div>
         `;
-    });   
+    });
+     // Ricollega gli event listener
 }
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // funzione per convertire num da stringa.....
-function estraiNumeriDaStringa(str) {  
-    const numeri = str.match(/\d+(\.\d+)?/g);//per trovare numeri interi e decimali
-    return numeri ? numeri.map(Number) : [];//numeri effettivi o stringa vuota
+function estrainumbersDaStringa(str) {  
+    const numbers = str.match(/\d+(\.\d+)?/g);//per trovare numbers interi e decimali
+    return numbers ? numbers.map(Number) : [];//numbers effettivi o stringa vuota
 }
 //////////////////////////////////////////////////////////////////////////
 // funzione per attivare effetto quando punto card.....
@@ -97,17 +100,17 @@ function stopHover(event) {
 function addFavour(addressPunct) {
     const punct = addressPunct;
     punct.classList.add("d-none");//1)nascondo la carta
-    libriPreferiti.push(punct);//2)pusho nella variabile globale i preferiti
+    productsFavourite.push(punct);//2)pusho nella variabile globale i preferiti
     const punctCounterFavour = document.getElementById("contatore_articoli_preferiti");//punta a <SPAN> con 0
     const dropdownFavour = document.getElementById("dropdown_preferiti")//punta a <UL>
-    punctCounterFavour.textContent = `${libriPreferiti.length}`;//imposto il numero di preferiti come lunghe
-    addToDropdownFavour(dropdownFavour, libriPreferiti[libriPreferiti.length-1]);//passo ul e oggetto dom carta ultima di arraay salvato
-     console.log(libriPreferiti[libriPreferiti.length-1]);
+    punctCounterFavour.textContent = `${productsFavourite.length}`;//imposto il numero di preferiti come lunghe
+    addToDropdownFavour(dropdownFavour, productsFavourite[productsFavourite.length-1]);//passo ul e oggetto dom carta ultima di arraay salvato
+    // console.log(productsFavourite[productsFavourite.length-1]);
 }
 //////////////////////////////////////////////////////////////////////////
 // Funzione per funzionalità aggiungi al carrello e contatore....
 function addToTrolley(punctCard) {
-    const price = estraiNumeriDaStringa(punctCard.lastElementChild.lastElementChild.textContent);//prendo il prezzo del libro
+    const price = estrainumbersDaStringa(punctCard.lastElementChild.lastElementChild.textContent);//prendo il prezzo del item
     totalTrolley.push( parseFloat(price));
     const dropdownFavour = document.getElementById("dropdown_carrello")//punta a <UL>
     const name = punctCard.querySelector("div h5").textContent;//titolo 
@@ -125,7 +128,7 @@ function addToTrolley(punctCard) {
  function pulisci() {
     // Resetta i carrelli e i preferiti
     totalTrolley = [];
-    libriPreferiti = [];
+    productsFavourite = [];
 
     // Pulisce il DOM
     workStation.innerHTML = '';
@@ -160,17 +163,17 @@ function addToTrolley(punctCard) {
 function search( string ) {
      // Pulisce il DOM
      workStation.innerHTML = '';
-     jsonProducts.forEach(libro => {
-        if( libro.title.toLowerCase().includes( string.toLowerCase() ) ){
+     jsonProducts.forEach(item => {
+        if( item.title.toLowerCase().includes( string.toLowerCase() ) ){
             workStation.innerHTML += 
             `
                 <div class="card card_custum position-relative" style="width: 15rem; height: 28rem">
-                    <img style="height: 18rem;" src="${libro.img}" class="card-img-top" alt="${libro.title}">
+                    <img style="height: 18rem;" src="${item.imageUrl}" class="card-img-top" alt="${item.title}">
                     <a href="#" class="btn btn-primary add_carrello">Aggiungi al carrello</a>
                     <a href="#" class="btn btn-primary preferiti"><i class="bi bi-heart-fill"></i></a>
                     <div class="card-body">
-                        <h5 class="card-title">${libro.title}</h5>
-                        <p class="card-text">Prezzo:${libro.price}€</p>
+                        <h5 class="card-title">${item.title}</h5>
+                        <p class="card-text">Prezzo:${item.price}€</p>
                     </div>
                 </div>
             `;
@@ -194,111 +197,72 @@ function search( string ) {
 }
 //////////////////////////////////////////////////////////////////////////
 // Funzione per aggiungere al dropdown dei preferiti.........
-function addToDropdownFavour( dropUl, libro ) {
-
-    // console.log(dropUl);
-    const src = libro.querySelector("img").getAttribute('src');
-    const alt = libro.querySelector("div h5").textContent;
+function addToDropdownFavour(dropUl, item) {//li ho messi in costanti perchè mi sembrava più pulito
+    const src = item.querySelector("img").getAttribute('src');
+    const alt = item.querySelector("div h5").textContent;
     const title = alt;
-    // console.log("oggetto:",libro.querySelector("img").getAttribute('src'));
-    dropUl.innerHTML += 
-    `
-        <li class = "d-flex flex-nowrap">
-            <img src="${src}" alt="${alt}">
-            <span>${title}</span>
-            <i class="bi bi-trash3-fill drop_i"></i>
-        </li>  
-    `
-    let indexFavourItem = libriPreferiti.length - 1;//indice del libro preferito corrente
-    const deleteButton = document.querySelectorAll(".drop_i");
 
-    deleteButton.forEach(elemento => {
-            elemento.addEventListener("click", function(){
-            indexFavourItem = libriPreferiti.length - 1;//indice del libro preferito corrente//indice del prezzo corrente aggiunto nell'array globale
-             deleteItem( dropUl.lastElementChild, indexFavourItem, 1);
-             const punctCounterFavour = document.getElementById("contatore_articoli_preferiti");//punto il contatore di articoli
-             punctCounterFavour.textContent = `${libriPreferiti.length}`;
-         })
+    const listItem = document.createElement("li");//creo un <li>
+    listItem.classList.add("d-flex", "flex-nowrap");
+    listItem.innerHTML = `
+        <img src="${src}" alt="${alt}">
+        <span>${title}</span>
+        <i class="bi bi-trash3-fill drop_i"></i>
+    `;//ci inserisco il codice che ho creato al click sul cuore
+
+    dropUl.appendChild(listItem);//lo inserisco nel dom
+
+    const deleteButton = listItem.querySelector(".drop_i");//punto il bottone delete
+    deleteButton.addEventListener("click", function () {
+        const indexToDelete = Array.from(dropUl.children).indexOf(listItem);//converto l'HTMLCollection in arrey e
+        // mi prendo l'indice (con indexOf) dell'elemento che voglio inveare a delete item per l'eliminazione
+        deleteItem(listItem, indexToDelete, 1);
     });
-        //    <div class="card card_custum position-relative d-none" style="width: 15rem; height: 28rem">
-        //         <img style="height: 18rem;" src="https://images-na.ssl-images-amazon.com/images/I/91xrEMcvmQL.jpg" class="card-img-top" alt="Pandemic (The Extinction Files, Book 1)">
-        //         <a href="#" class="btn btn-primary add_carrello">Aggiungi al carrello</a>
-        //         <a href="#" class="btn btn-primary preferiti"><i class="bi bi-heart-fill"></i></a>
-        //         <div class="card-body">
-        //             <h5 class="card-title">Pandemic (The Extinction Files, Book 1)</h5>
-        //             <p class="card-text">Prezzo:7.81€</p>
-        //         </div>
-        //     </div>
-
-
-
 }
 //////////////////////////////////////////////////////////////////////////
 // Funzione per aggiungere al dropdown del carrello.........
- function addToDropdownTrolley( dropUl, bookName, textTotal ) {
-    let indexPrice = totalTrolley.length - 1;//indice del prezzo corrente aggiunto nell'array globale
-    // console.log(dropUl);
-    // console.log("oggetto:",libro.querySelector("img").getAttribute('src'));
-    dropUl.innerHTML += 
-    `
-        <li class = "d-flex flex-nowrap">
-            <i class="bi bi-trash3-fill drop_i"></i>
-            <span>${bookName}</span>
-            <span>${totalTrolley[indexPrice]}€</span>
-        </li>  
+function addToDropdownTrolley(dropUl, itemName, textTotal) {
+    let indexPrice = totalTrolley.length - 1;
+
+    const listItem = document.createElement("li");
+    listItem.classList.add("d-flex", "flex-nowrap");
+    listItem.innerHTML = `
+        <i class="bi bi-trash3-fill drop_i"></i>
+        <span>${itemName}</span>
+        <span>${totalTrolley[indexPrice]}€</span>
     `;
-    
-    const deleteButton = document.querySelectorAll(".drop_i");
-    // console.log("bottone",indexPrice, deleteButton);
-    deleteButton.forEach(elemento => {
-        elemento.addEventListener("click", function(){
-            indexPrice = totalTrolley.length - 1;//indice del prezzo corrente aggiunto nell'array globale
-             deleteItem( dropUl.lastElementChild, indexPrice, 2);
-            const punctTrolley = document.getElementById("contatore_articoli_carrello");//punto il contatore di articoli
-            punctTrolley.textContent = `${totalTrolley.length}`;
-            let price;
-            if( totalTrolley.length > 0){
-              price = totalTrolley.reduce((accumulator, currentValor)=> accumulator + currentValor );
-            }else{
-              price = 0;
-            }   
-            //  console.log("price",price);
-             textTotal.textContent = `${price.toFixed(2)}€`;
-         })
+
+    dropUl.appendChild(listItem);
+
+    const deleteButton = listItem.querySelector(".drop_i");
+    deleteButton.addEventListener("click", function () {
+        const indexToDelete = Array.from(dropUl.children).indexOf(listItem);
+        deleteItem(listItem, indexToDelete, 2);
+        const punctTrolley = document.getElementById("contatore_articoli_carrello");
+        punctTrolley.textContent = `${totalTrolley.length}`;
+        let price = totalTrolley.length > 0 ? totalTrolley.reduce((accumulator, currentValor) => accumulator + currentValor) : 0;
+        textTotal.textContent = `${price.toFixed(2)}€`;
     });
-    
-    
-        //    <div class="card card_custum position-relative d-none" style="width: 15rem; height: 28rem">
-        //         <img style="height: 18rem;" src="https://images-na.ssl-images-amazon.com/images/I/91xrEMcvmQL.jpg" class="card-img-top" alt="Pandemic (The Extinction Files, Book 1)">
-        //         <a href="#" class="btn btn-primary add_carrello">Aggiungi al carrello</a>
-        //         <a href="#" class="btn btn-primary preferiti"><i class="bi bi-heart-fill"></i></a>
-        //         <div class="card-body">
-        //             <h5 class="card-title">Pandemic (The Extinction Files, Book 1)</h5>
-        //             <p class="card-text">Prezzo:7.81€</p>
-        //         </div>
-        //     </div>
-
-
-
 }
 //////////////////////////////////////////////////////////////////////////
 // Funzione per eliminare dal carrello articolo singolo nel dropdown.........
- function deleteItem( addressToDelete, indexToDelete, flag){
-    // 1 === preferiti   //   2 === carrello
-    addressToDelete.remove(); // Rimuovi l'elemento dal DOM
-    if( flag === 1 ){
-        libriPreferiti.splice(indexToDelete, 1); // Rimuovi l'elemento dall'array
-    }else if ( flag === 2 ){
-        totalTrolley.splice(indexToDelete, 1);// Rimuovi l'elemento dall'array
+function deleteItem(addressToDelete, indexToDelete, flag) {//il flag indica la funzione
+    addressToDelete.remove(); // Rimuove l'elemento visivo dal DOM
+    if (flag === 1) {
+        productsFavourite.splice(indexToDelete, 1); // Rimuove l'elemento dentro l'array dei preferiti
+        const punctCounterFavour = document.getElementById("contatore_articoli_preferiti");
+        punctCounterFavour.textContent = `${productsFavourite.length}`;
+    } else if (flag === 2) {
+        totalTrolley.splice(indexToDelete, 1); // Rimuove l'elemento dall'array del carrello
+        const punctTrolley = document.getElementById("contatore_articoli_carrello");
+        punctTrolley.textContent = `${totalTrolley.length}`;
     }
-    
-   
 }
 //........................................................................................................................................................
 //--------PASSAGGI ESECUZIONE PROGAMMA --------//
 document.addEventListener("DOMContentLoaded", async function() {
     try {
-            const data = await requestFetchGet(URL_PRODUCTS_ANDPOINT, KEY_PRODUCTS_ANDPOINT);
+            const data = await requestFetchGet(URL_PRODUCTS_ENDPOINT, KEY_PRODUCTS_ENDPOINT);
             jsonProducts.push(...data);
             await renderingDom(jsonProducts, workStation);
             const cards = document.querySelectorAll('.card');
@@ -326,7 +290,6 @@ document.addEventListener("DOMContentLoaded", async function() {
                 const string = punctSearchBar.value;
                 search(string);//chiamata
             })
-            console.log(punctClean);
     } 
     catch (error) {
         console.error("Errore:", error);

@@ -27,7 +27,7 @@ function renderDashboard(data) {//popola la dashboard
     data.forEach(product => {
         const row = `
             <tr>
-                <td>ID:${product._id}</td>
+                <td><span class="fw-bold"">ID:</span> ${product._id}</td>
                 <td>${product.name}</td>
                 <td>${product.brand}</td>
                 <td>${product.price}</td>
@@ -95,37 +95,70 @@ function inputOfFilter(punct) { // Ritorna la selezione da ricercare
     return punct.value; // Ritorna il campo di ricerca
 }
 
+// Funzione per pulire il campo di ricerca e ristabilire il DOM
+function resetSearchBarAndDOM(dom_dash) {
+    if(dom_dash == 1){
+    const barSearch = document.getElementById("research");
+    barSearch.value = ""; // Pulisco la barra di ricerca
+    renderingDOM(arrayProducts); // E rirenderizzo il DOM con tutti i prodotti
+    }else{
+        const barSearchTwo = document.getElementById("research_two");
+        barSearchTwo.value = ""; // Pulisco la barra di ricerca della dashboard
+        renderDashboard(arrayProducts); // E rirenderizzo la dashboard con tutti i prodotti
+    }
+    
+   
+}
+
+// Funzione di ricerca 
 function returnArrayNew(key, array, researchInputUser) {
     const newArray = [];
+    key = key.trim();
     array.forEach(elemento => {
-        if (elemento[key].toLowerCase().includes(researchInputUser.toLowerCase())) {
-            newArray.push(elemento);
+        if (key === "price") {
+            // Converto il valore dell'input e il prezzo dell'elemento in numeri
+            const searchPrice = parseFloat(researchInputUser);
+            const productPrice = parseFloat(elemento[key]);
+            console.log(searchPrice, productPrice);
+            // Controllo uguaglianza
+            if ( productPrice === searchPrice) {
+                newArray.push(elemento);
+            }
+        } else {
+            // Per tutte le altre chiavi
+            if (elemento[key].toLowerCase().includes(researchInputUser.toLowerCase())) {
+                newArray.push(elemento);
+            }
         }
     });
-    return newArray;
-} 
 
+    return newArray;
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     requestFetchGet(URL_PRODUCTS_ENDPOINT, KEY_PRODUCTS_ENDPOINT);
-    const select = document.getElementById("filtro"); // Punto SELECT - OPTIONS
-    const barSearch = document.getElementById("research"); // Punto INPUT
-    let keyCurrent = inputOfFilter(select);
-    select.addEventListener("change", function() {  // Evento sulla chiave
-        keyCurrent = inputOfFilter(select);
-        barSearch.value = ""; // Quando utente cambia chiave pulisco la barra di ricerca
-        renderingDOM(arrayProducts); // E rirenderizzo il DOM
+    const select_one = document.getElementById("filtro"); // Punto SELECT - OPTIONS
+    const select_two = document.getElementById("filtro_two"); // Punto SELECT - OPTIONS
+    const barSearch = document.getElementById("research"); // Punto INPUT per delete
+    const barSearchTwo = document.getElementById("research_two"); // Punto INPUT per dashboard
+    let keyCurrent = inputOfFilter(select_one);
+
+    select_one.addEventListener("change", function() { // Evento sulla chiave
+        keyCurrent = inputOfFilter(select_one);
+        resetSearchBarAndDOM(1); // Pulisco la barra di ricerca e rirenderizzo il DOM
     });
+    select_two.addEventListener("change", function() { // Evento sulla chiave
+        keyCurrent = inputOfFilter(select_two);
+        resetSearchBarAndDOM(2); // Pulisco la barra di ricerca e rirenderizzo il DOM
+    });
+
     barSearch.addEventListener("input", function() { // Evento sulla barra di ricerca (ad ogni lettera inserita)
         renderingDOM(returnArrayNew(keyCurrent, arrayProducts, barSearch.value));
     });
-    //inserito dopo per gestire la ricerca dashboard
-    document.getElementById("research_two").addEventListener("input", function() {
-        const searchQuery = this.value.toLowerCase();
-        const filteredProducts = returnArrayNew("name", arrayProducts, searchQuery); 
-        renderDashboard(filteredProducts);
+
+    barSearchTwo.addEventListener("input", function() { // Evento sulla barra di ricerca della dashboard (ad ogni lettera inserita)
+        renderDashboard(returnArrayNew(keyCurrent, arrayProducts, barSearchTwo.value));
     });
-    
 });
 
  
